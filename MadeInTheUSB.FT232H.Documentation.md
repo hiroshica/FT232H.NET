@@ -1,4 +1,6 @@
-﻿# MadeInTheUSB FT232H .NET Library
+﻿# MadeInTheUSB FT232H.NET Library
+
+A .NET library to talk to the FTDI chip FT232H
 
 The library MadeInTheUSB.FT232H provides abstraction to program 
 * The SPI protocol
