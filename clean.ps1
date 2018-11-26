@@ -48,15 +48,13 @@ function DeleteFile([string]$file) {
 }
 cls
 "MUSB Source Code Management Tool"
-$ROOT = "C:\DVT\MUSB\NusbioDisk2018"
+$ROOT = "C:\DVT\MadeInTheUSB\FT232H.NET"
 cd "$ROOT"
 
 switch($action.ToLowerInvariant()) {
 
     "clean" { 
         "Cleaning... "
-        DeleteFolder "$ROOT\MUSB_FS_2018\TestResults"
-        DeleteFolder "$ROOT\MUSB_FS_2018\packages"
 
         #md "$ROOT\MadeInTheUSB.WebSite.Deployed"
         #DeleteFile "$ROOT\MUSB_FS.VC.db"
