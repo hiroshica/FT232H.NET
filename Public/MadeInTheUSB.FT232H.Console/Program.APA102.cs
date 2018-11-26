@@ -44,6 +44,7 @@ namespace MadeInTheUSB.FT232H.Console
                         .Wait(wait);
                 }
             }
+            api102.AllOff();
         }
     }
 }

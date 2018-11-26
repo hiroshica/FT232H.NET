@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MadeInTheUSB.FT232H.Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Ref\MadeInTheUSB.FT232H.Lib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -43,12 +47,6 @@
   <ItemGroup>
     <Compile Include="APA_102_RGB_LED\APA102LEDStrip.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Private\MadeInTheUSB.FT232H.Lib\MadeInTheUSB.FT232H.Lib.csproj">
-      <Project>{d2610e23-15f7-4817-9111-d6870443882c}</Project>
-      <Name>MadeInTheUSB.FT232H.Lib</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

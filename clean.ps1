@@ -46,6 +46,7 @@ function DeleteFile([string]$file) {
         Remove-Item "$file" -Force
     }
 }
+
 cls
 "MUSB Source Code Management Tool"
 $ROOT = "C:\DVT\MadeInTheUSB\FT232H.NET"
