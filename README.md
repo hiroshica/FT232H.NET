@@ -14,6 +14,72 @@ Not supported yet:
 	* To support I2C and SPI at the same time you can use the FT2232H or the FT4222H.
 
 - Serial communication
+
+## Samples
+
+### GPIOs
+
+```csharp
+static void GpioSample(IDigitalWriteRead gpios, bool oneLoopOnly = false)
+{
+	for(var i=0; i < gpios.MaxGpio; i++)
+	{
+		gpios.DigitalWrite(i, PinState.High);
+	}
+	Thread.Sleep(waitTime);
+	for(var i=0; i < gpios.MaxGpio; i++)
+	{
+		gpios.DigitalWrite(i, PinState.Low);
+		Thread.Sleep(waitTime);
+	}
+}
+
+static void Main(string[] args)
+{
+	var ft232Device = FT232HDetector.Detect();
+	if(ft232Device.Ok)
+		System.Console.WriteLine(ft232Device.ToString());
+
+	var ft232hGpioSpiDevice = new GpioSpiDevice(MpsseSpiConfig.GetDefault());
+	var gpios               = ft232hGpioSpiDevice.GPIO;
+	GpioSample(gpios, true);
+}
+```
+
+### SPI
+
+```csharp
+static void CypressFlashMemorySample(ISPI spi)
+{
+	const int EEPROM_READ_IDENTIFICATION = 0x9F;
+	byte [] buffer = new byte [18];
+
+	if(spi.Ok(spi.Query(new byte [] { EEPROM_READ_IDENTIFICATION },  buffer))) {
+
+		var manufacturer       = (Manufacturers)buffer[0];
+		var deviceID           = (CYPRESS_S25FLXXX_DEVICE_ID)((buffer[1] << 8) + buffer[2]);
+		var sectorArchitecture = (CYPRESS_SECTOR_ARCHITECTURE)buffer[4];
+		var familyID           = (CYPRESS_FAMILIY_ID)buffer[5];
+		var packageModel       = string.Empty;
+		packageModel          += ((char)buffer[6]).ToString();
+		packageModel          += ((char)buffer[7]).ToString();
+
+		System.Console.WriteLine($"FLASH Memory manufacturer:{manufacturer}, deviceID:{deviceID}, sectorArchitecture:{sectorArchitecture}, familyID:{familyID}, packageModel:{packageModel}");
+	}
+}
+
+static void Main(string[] args)
+{
+	var ft232Device = FT232HDetector.Detect();
+	if(ft232Device.Ok)
+		System.Console.WriteLine(ft232Device.ToString());
+
+	var ft232hGpioSpiDevice = new GpioSpiDevice(MpsseSpiConfig.GetDefault());
+	var spi = ft232hGpioSpiDevice.SPI;
+
+	CypressFlashMemorySample(spi);
+}
+```
  
 ## Breakouts available
  
@@ -21,9 +87,14 @@ Not supported yet:
  [Adafruit FT232H Breakout](https://www.adafruit.com/product/2264) 
  	- General Purpose USB to GPIO+SPI+I2C
 
+	- Adafruit FT232 with 16x4 matrix -> https://bit.ly/2RgmvAl
+	- Adafruit FT232 with 4x4 matrix -> https://bit.ly/2DYEkRd
+
+
  * [Chinese/eBay FT232H breakout](https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313.TR12.TRC2.A0.H0.Xft232H.TRS0&_nkw=ft232H&_sacat=0)
  	- This breakout does not contains an EEPROM therefore it is possible to program the device id or description.
 	- SPI and GPIOs are working fine.
+	- Chinese FT232H Breakout with 8 GPIOs and 1 APA 102 RGB LED connected -> https://bit.ly/2RhpmZA
  
  * [Chinese/eBay FT 2 232H breakout](https://www.ebay.com/itm/1-pcs-USB-to-UART-FIFO-SPI-I2C-JTAG-RS232-module-FT2232HL-D1L2/253767822756?epid=14010988565&hash=item3b15bdada4)
 	- I never tested this breakout, but seems interesting
