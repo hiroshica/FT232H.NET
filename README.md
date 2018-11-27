@@ -84,17 +84,19 @@ static void Main(string[] args)
 ## Breakouts available
  
  * The Adafruit breakout: 
- [Adafruit FT232H Breakout](https://www.adafruit.com/product/2264) 
- 	- General Purpose USB to GPIO+SPI+I2C
+ [Adafruit FT232H Breakout](https://www.adafruit.com/product/2264) General Purpose USB to GPIO+SPI+I2C
+ 	- This breakout does contains an EEPROM therefore it is possible to program the device id or description.
 
-	- Adafruit FT232 with 16x4 matrix -> https://bit.ly/2RgmvAl
-	- Adafruit FT232 with 4x4 matrix -> https://bit.ly/2DYEkRd
+	- Images
+		* Adafruit FT232 with 16x4 matrix -> https://bit.ly/2RgmvAl
+		* Adafruit FT232 with 4x4 matrix -> https://bit.ly/2DYEkRd
 
 
  * [Chinese/eBay FT232H breakout](https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313.TR12.TRC2.A0.H0.Xft232H.TRS0&_nkw=ft232H&_sacat=0)
- 	- This breakout does not contains an EEPROM therefore it is possible to program the device id or description.
+ 	- This breakout does ***not*** contains an EEPROM therefore it is ***not*** possible to program the device id or description.
 	- SPI and GPIOs are working fine.
-	- Chinese FT232H Breakout with 8 GPIOs and 1 APA 102 RGB LED connected -> https://bit.ly/2RhpmZA
+	- Images
+		* Chinese FT232H Breakout with 8 GPIOs and 1 APA 102 RGB LED connected -> https://bit.ly/2RhpmZA
  
  * [Chinese/eBay FT 2 232H breakout](https://www.ebay.com/itm/1-pcs-USB-to-UART-FIFO-SPI-I2C-JTAG-RS232-module-FT2232HL-D1L2/253767822756?epid=14010988565&hash=item3b15bdada4)
 	- I never tested this breakout, but seems interesting
