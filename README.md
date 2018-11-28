@@ -111,25 +111,23 @@ static void Main(string[] args)
 - [FTDI Program Guides](https://www.ftdichip.com/Support/Documents/ProgramGuides.htm)
 - [Application Note AN_177 User Guide For libMPSSE – I2C](https://www.ftdichip.com/Support/Documents/AppNotes/AN_177_User_Guide_For_LibMPSSE-I2C.pdf)
 
-
 - [Speaking SPI & I2C With The FT-2232](http://www.devttys0.com/2011/11/speaking-spi-i2c-with-the-ft-2232/)
 
 ## SPI, I2C, GPIO Wiring
 
  * SPI
-	- Clock AD0
+	- CLOCK AD0
 	- MOSI  AD1
 	- MISO  AD2
-	- CS0   AD3, CS1:AD4, CS2:AD5, CS3:AD6, CS4:AD7
+	- CS    5 Chip select are available. CS0:AD3, CS1:AD4, CS2:AD5, CS3:AD6, CS4:AD7
+			The library is configured to use CS0:AD3 as the default.
 
  * I2C
-	- Clock   AD0
+	- CLOCK   AD0
 	- SDA OUT AD1
 	- SDA IN  AD2
-
 	- SDA OUT and SDA IN need to be connected because in I2C there is only one data write.
-	- The data and clock wire each requires a pull up resistor.
-	aaa
+	- The data and clock wire each requires a pull up resistor (Not sure what value probably 4.7k).
 
  * GPIOS
 	- GPIO 0..7: AC0..C7. 
