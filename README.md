@@ -22,6 +22,7 @@ Not supported yet:
 ```csharp
 static void GpioSample(IDigitalWriteRead gpios, bool oneLoopOnly = false)
 {
+	var waitTime = 100;
 	for(var i=0; i < gpios.MaxGpio; i++)
 	{
 		gpios.DigitalWrite(i, PinState.High);
@@ -30,8 +31,8 @@ static void GpioSample(IDigitalWriteRead gpios, bool oneLoopOnly = false)
 	for(var i=0; i < gpios.MaxGpio; i++)
 	{
 		gpios.DigitalWrite(i, PinState.Low);
-		Thread.Sleep(waitTime);
 	}
+	Thread.Sleep(waitTime);
 }
 
 static void Main(string[] args)
@@ -119,7 +120,7 @@ static void Main(string[] args)
 	- CLOCK AD0
 	- MOSI  AD1
 	- MISO  AD2
-	- CS    5 Chip select are available. CS0:AD3, CS1:AD4, CS2:AD5, CS3:AD6, CS4:AD7
+	- CS    5 Chip selects are available. CS0:AD3, CS1:AD4, CS2:AD5, CS3:AD6, CS4:AD7.
 			The library is configured to use CS0:AD3 as the default.
 
  * I2C
