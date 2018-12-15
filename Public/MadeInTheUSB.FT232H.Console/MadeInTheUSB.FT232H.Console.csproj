@@ -64,4 +64,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)..\ref\libMPSSE.dll" "$(TargetDir)"
+
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>
