@@ -15,8 +15,8 @@ Not supported yet:
 
 # Chip
 
-* RGB LED strip of type APA102 are supported with examples
-* 8x8, 16x8 and 32x8 LED matrix based on the MAX7219 chip are supported with examples
+* RGB LED strip of type `APA102` are supported with examples
+* 8x8, 16x8 and 32x8 LED matrix based on the `MAX7219` chip are supported with examples
 * Any EPPROM and Flash memory using the SPI protocol should be supported
 
 - Serial communication
