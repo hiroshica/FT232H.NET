@@ -3,6 +3,7 @@
 The .NET/Windows library MadeInTheUSB.FT232H provides an abstraction to program
 * The SPI protocol
 * The GPIOs
+
 for break out based on the FTDI chip FT232H.
 
 Not supported yet:
