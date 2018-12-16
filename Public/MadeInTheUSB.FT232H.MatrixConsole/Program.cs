@@ -636,7 +636,14 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
         {
             var ft232Device = FT232HDetector.Detect();
             if (ft232Device.Ok)
+            {
                 System.Console.WriteLine(ft232Device.ToString());
+            }
+            else
+            {
+                Environment.Exit(1);
+            }
+                
 
             Cls(ft232Device.ToString());
 
