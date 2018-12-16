@@ -1,8 +1,6 @@
 # MadeInTheUSB FT232H NET Library
 
-A .NET/Windows library to talk to the FTDI chip FT232H.
-
-The library MadeInTheUSB.FT232H provides an abstraction to program 
+The .NET/Windows library MadeInTheUSB.FT232H provides an abstraction to program
 * The SPI protocol
 * The GPIOs
 for break out based on the FTDI chip FT232H.
@@ -20,7 +18,6 @@ Not supported yet:
 * Any EPPROM and Flash memory using the SPI protocol should be supported
 
 ![FT232H with 64x8 LED Matrix](https://github.com/madeintheusb/FT232H.NET/blob/master/FT232H_64x8%20LED%20Matrix.jpg?raw=true)
-
 
 ## Samples
 
