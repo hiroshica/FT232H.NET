@@ -595,6 +595,41 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
             var k = Console.ReadKey();
         }
 
+        private static void LandscapeDemo(NusbioMatrix matrix, int deviceIndex = 0)
+        {
+            Console.Clear();
+            ConsoleEx.TitleBar(0, "Random Landscape Demo");
+            ConsoleEx.WriteMenu(0, 2, "Q)uit  F)ull speed");
+            var landscape = new NusbioLandscapeMatrix(matrix, 0);
+
+            var speed = 100;
+            if(matrix.DeviceCount == 1)
+                speed = 150;
+
+            matrix.Clear(all: true);
+            var quit = false;
+            var fullSpeed = false;
+
+            while (!quit)
+            {
+                landscape.Redraw();
+
+                ConsoleEx.WriteLine(0, 4, landscape.ToString(), ConsoleColor.Cyan);
+                if(!fullSpeed)
+                    Thread.Sleep(speed);
+                
+                if (Console.KeyAvailable)
+                {
+                    switch (Console.ReadKey(true).Key)
+                    {
+                        case ConsoleKey.Q: quit = true; break;
+                        case ConsoleKey.F:
+                            fullSpeed = !fullSpeed; break;
+                    }
+                }
+            }
+        }
+
 
 
         static void Main(string[] args)
@@ -647,6 +682,8 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
                         matrix.Clear(all: true, refresh: true);
                     if (k == ConsoleKey.T)
                         ScrollText(matrix);
+                    if (k == ConsoleKey.L)
+                        LandscapeDemo(matrix);
                     Cls(ft232Device.ToString());
                     matrix.Clear(all: true, refresh: true);
                 }

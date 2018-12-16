@@ -353,7 +353,7 @@ namespace MadeInTheUSB.FT232H.Components
 
             for(var i = 0; i < _deviceCount; i++)
             {
-                var r1 = SpiTransfer(i, OP_DISPLAYTEST, 0);
+                var r1 = this.SpiTransfer(i, OP_DISPLAYTEST, 0);
 
                 //scanlimit is set to max on startup
                 // The scan-limit register sets how many digits are displayed, from 1 to 8. T
@@ -362,14 +362,14 @@ namespace MadeInTheUSB.FT232H.Components
                 // Each 7-Segments require 8 LEDs time 8, it is 8 x 8 = 64. 
                 // Since we want to handle most of the time 8x8 LEDs we need to set it to
                 // the max. 
-                var r2 = SetScanLimit(i, MAX_SCAN_LIMIT-1);
+                var r2 = this.SetScanLimit(i, MAX_SCAN_LIMIT-1);
 
                 // decode is done in source
-                var r3 = SpiTransfer(i, OP_DECODEMODE, 0); // No decode mode, see datasheet page 7
+                var r3 = this.SpiTransfer(i, OP_DECODEMODE, 0); // No decode mode, see datasheet page 7
 
-                Clear(i, refresh: true);
+                this.Clear(i, refresh: true);
                 //we go into Shutdown-mode on startup
-                Shutdown(true, i);
+                this.Shutdown(true, i);
             }
        }
 
@@ -398,9 +398,9 @@ namespace MadeInTheUSB.FT232H.Components
                 return r.Succeeded;
 
             if(status)
-                r = SpiTransfer(devIndex, OP_SHUTDOWN,0);
+                r = this.SpiTransfer(devIndex, OP_SHUTDOWN,0);
             else
-                r = SpiTransfer(devIndex, OP_SHUTDOWN,1);
+                r = this.SpiTransfer(devIndex, OP_SHUTDOWN,1);
 
             return r.Succeeded;
         }
@@ -420,7 +420,7 @@ namespace MadeInTheUSB.FT232H.Components
                 return r.Succeeded;
 
             if(limit >= 0 && limit < 8)
-                r = SpiTransfer(devIndex, OP_SCANLIMIT,(byte)limit);
+                r = this.SpiTransfer(devIndex, OP_SCANLIMIT,(byte)limit);
 
             return r.Succeeded;
         }
@@ -470,7 +470,7 @@ namespace MadeInTheUSB.FT232H.Components
 
             if (intensity >= 0 && intensity <= MAX_BRITGHNESS)
             {
-                var r = SpiTransfer(deviceIndex, OP_INTENSITY, (byte)intensity);
+                var r = this.SpiTransfer(deviceIndex, OP_INTENSITY, (byte)intensity);
                 return r.Succeeded;
             }
             else return false;
@@ -718,7 +718,7 @@ namespace MadeInTheUSB.FT232H.Components
                 l.Add((byte)(row + 1));      // Api to set the row 1 -- order will be reversed
             }
             l.Reverse();
-            var r = SpiTransferBuffer(l, false);
+            var r = this.__SpiTransferBuffer(l, false);
             return r;
         }
         
@@ -745,7 +745,7 @@ namespace MadeInTheUSB.FT232H.Components
 
             int offset = deviceIndex * MATRIX_ROW_SIZE;
 
-            r = SpiTransfer(deviceIndex, (byte)(row+1),_pixels[offset+row], computeBufferOnly: computeBufferOnly);
+            r = this.SpiTransfer(deviceIndex, (byte)(row+1),_pixels[offset+row], computeBufferOnly: computeBufferOnly);
             return r;
         }
 
@@ -783,7 +783,7 @@ namespace MadeInTheUSB.FT232H.Components
         /// <param name="column"></param>
         /// <param name="state"></param>
         /// <param name="refresh"></param>
-        public void SetLed(int deviceIndex, int column, int row, Boolean state, bool refresh = false)
+        public void SetLed(int deviceIndex, int column, int row, bool state, bool refresh = false)
         {
             byte val = 0x00;
 
@@ -828,7 +828,7 @@ namespace MadeInTheUSB.FT232H.Components
                 return;
             int offset = deviceIndex * MATRIX_ROW_SIZE;
             _pixels[offset+row]=value;
-            SpiTransfer(deviceIndex, (byte)(row+1),_pixels[offset+row]);
+            this.SpiTransfer(deviceIndex, (byte)(row+1),_pixels[offset+row]);
         }
 
         /// <summary>
@@ -909,6 +909,13 @@ namespace MadeInTheUSB.FT232H.Components
             }
         }
 
+        /// <summary>
+        /// Seven Segment support
+        /// </summary>
+        /// <param name="deviceIndex"></param>
+        /// <param name="value"></param>
+        /// <param name="format"></param>
+        /// <param name="startDigit"></param>
         public void DisplayNumber(int deviceIndex, double value, string format, int startDigit = 0)
         {
             var s             = value.ToString(format);
@@ -972,41 +979,9 @@ namespace MadeInTheUSB.FT232H.Components
             if(dp)
                 v|=128;
             _pixels[offset+digit] = v;
-            SpiTransfer(deviceIndex, (byte)(digit+1), v);
+            this.SpiTransfer(deviceIndex, (byte)(digit+1), v);
         }
-        /*
-         * Looks like we cannot set a batch command for one MAX7219.
-         * We can if we chained MAX7219
-        public void SetDigit(int deviceIndex, int digit, List<int> values, Boolean dp)
-        {
-            var buffer = new List<byte>();
-            foreach (var v in values)
-                buffer.Add((byte) WinUtil.BitUtil.ParseBinary(charTable[v]));
-            
-            SetDigitDataByte(deviceIndex, buffer, dp);
-        }
-
-        public void SetDigitDataByte(int deviceIndex, List<byte> values, Boolean dp)
-        {
-            if(deviceIndex < 0 || deviceIndex >= _deviceCount)
-                return;
-
-            int offset = deviceIndex * MATRIX_ROW_SIZE;
-            var buffer = new List<byte>();
-
-            for (var x = 0; x < values.Count; x++)
-            {
-                var v = values[x];
-                if (dp)
-                    v |= 128;
-                _pixels[offset + x] = v;
-                buffer.Add(v);
-                buffer.Add((byte)(x+1));
-            }
-            buffer.Reverse();
-            SpiTransferBuffer(buffer);
-        }
-        */
+       
         /// <summary>
         /// Display a character on a 7-Segment Display.
         /// There are only a few characters that make sense here :
@@ -1037,7 +1012,7 @@ namespace MadeInTheUSB.FT232H.Components
             offset = deviceIndex * MATRIX_ROW_SIZE;
             index  = (byte)value;
 
-            if(index >127) {
+            if(index > 127) {
                 //no defined beyond index 127, so we use the space char
                 index = 32;
             }
@@ -1045,10 +1020,10 @@ namespace MadeInTheUSB.FT232H.Components
             if(dp)
                 v|=128;
             _pixels[offset+digit] = v;
-            SpiTransfer(deviceIndex, (byte)(digit+1), v);
+            this.SpiTransfer(deviceIndex, (byte)(digit+1), v);
         }
 
-        private SPIResult SpiTransferBuffer(List<byte> buffer, bool software = false)
+        private SPIResult __SpiTransferBuffer(List<byte> buffer, bool software = false)
         {
             var r = new SPIResult();
             BytesSentOutCounter += buffer.Count;
@@ -1056,19 +1031,6 @@ namespace MadeInTheUSB.FT232H.Components
                 return r.Succeed();
             else
                 return r.Failed();
-            //software = true;
-            //if (software)
-            //{
-            //    for(var i = 0; i < buffer.Count; i++)
-            //        Shift.ShiftOut(this._nusbio, Nusbio.GetGpioIndex(this._spiEngine.MosiGpio), Nusbio.GetGpioIndex(this._spiEngine.ClockGpio), buffer[i]);
-            //}
-            //else
-            //{
-            //    BytesSentOutCounter += buffer.Count;
-
-            //    r = this._spiEngine.Transfer(buffer, optimizeDataLine: OptimizeSpiDataLine);
-            //}
-            
         }
 
         private SPIResult SpiTransfer(int devIndex, byte opCode, byte data, bool software = false, bool computeBufferOnly = false)
@@ -1100,38 +1062,10 @@ namespace MadeInTheUSB.FT232H.Components
             }
             else
             {
-                r = SpiTransferBuffer(buffer, software);
+                r = this.__SpiTransferBuffer(buffer, software);
             }
             return r;
         }
-
-        //private void SpiTransferBufferGpioSequence(List<byte> buffer)
-        //{
-        //    this._spiEngine.Select();
-
-        //    var s = this._nusbio.GetTransferBufferSize();
-        //    var gs = new GpioSequence((this._nusbio as Nusbio).GetGpioMask(), s);
-        //    var i = 0;
-        //    while (i < buffer.Count)
-        //    {
-        //        if (gs.EmptySpace >= GpioSequence.BIT_PER_BYTE)
-        //        {                    
-        //            // Add one byte to the gpio sequence
-        //            gs.ShiftOut(this._nusbio as Nusbio, this._spiEngine.MosiGpio, this._spiEngine.ClockGpio, buffer[i], dataAndClockOptimized: true);
-        //            i += 1;
-        //        }
-        //        else
-        //        {
-        //            gs.Send(this._nusbio as Nusbio);
-        //            var lastMaskValue = gs[gs.Count - 1];
-        //            gs = new GpioSequence(lastMaskValue, this._nusbio.GetTransferBufferSize());
-        //        }
-        //    }
-        //    if (gs.Count > 0)
-        //        gs.Send(this._nusbio as Nusbio, optimizeDataLine:OptimizeSpiDataLine );
-
-        //    this._spiEngine.Unselect();
-        //}
 
         public void SetPixel(int index, byte val)
         {
