@@ -5,7 +5,7 @@ A .NET/Windows library to talk to the FTDI chip FT232H.
 The library MadeInTheUSB.FT232H provides an abstraction to program 
 * The SPI protocol
 * The GPIOs
-for break out based on the FTDI chip ft232H.
+for break out based on the FTDI chip FT232H.
 
 Not supported yet:
 - I2C
@@ -16,12 +16,11 @@ Not supported yet:
 # Chip
 
 * RGB LED strip of type `APA102` are supported with examples
-* 8x8, 16x8 and 32x8 LED matrix based on the `MAX7219` chip are supported with examples
+* 8x8, 32x8 and 64x8 LED matrix based on the `MAX7219` chip are supported with examples
 * Any EPPROM and Flash memory using the SPI protocol should be supported
 
-![FT232H with 64x8 LED Matrix](./FT232H_64x8 LED Matrix.jpg)
+![FT232H with 64x8 LED Matrix](https://github.com/madeintheusb/FT232H.NET/blob/master/FT232H_64x8%20LED%20Matrix.jpg?raw=true)
 
-- Serial communication
 
 ## Samples
 
@@ -99,7 +98,6 @@ static void Main(string[] args)
 	- Images
 		* Adafruit FT232 with 16x4 matrix -> https://bit.ly/2RgmvAl
 		* Adafruit FT232 with 4x4 matrix -> https://bit.ly/2DYEkRd
-
 
  * [Chinese/eBay FT232H breakout](https://www.ebay.com/sch/i.html?_from=R40&_trksid=p2380057.m570.l1313.TR12.TRC2.A0.H0.Xft232H.TRS0&_nkw=ft232H&_sacat=0)
  	- This breakout does ***not*** contains an EEPROM therefore it is ***not*** possible to program the device id or description.
