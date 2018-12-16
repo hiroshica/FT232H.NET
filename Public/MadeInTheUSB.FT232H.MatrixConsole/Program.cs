@@ -133,6 +133,8 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
             "B11111111",
         };
 
+        
+
         private static List<string> Square06Bmp = new List<string>()
         {
             "B11111111",
@@ -462,7 +464,6 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
             }
         }
 
-
         static void ScrollDemo(NusbioMatrix matrix, int deviceIndex)
         {
             Console.Clear();
@@ -494,7 +495,7 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
         private static void ScrollText(NusbioMatrix matrix, int deviceIndex = 0)
         {
             var quit = false;
-            var speed = 30;
+            var speed = 10;
             var text = "Hello World!      ";
 
             if (matrix.DeviceCount == 1 && matrix.MAX7219Wiring == NusbioMatrix.MAX7219_WIRING_TO_8x8_LED_MATRIX.OriginBottomRightCorner)
@@ -550,7 +551,6 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
             }
         }
 
-
         static void PerformanceTest(NusbioMatrix matrix, int deviceIndex)
         {
             Console.Clear();
@@ -563,20 +563,6 @@ namespace MadeInTheUSB.FT232H.MatrixConsole
             var images = new List<List<string>> {
                 Square00Bmp, Square02Bmp
             };
-
-            //ConsoleEx.WriteLine(0, 3, "Slow mode first", ConsoleColor.Cyan);
-            //ConsoleEx.Gotoxy(0, 4);
-            //for (byte rpt = 0; rpt < maxRepeat; rpt++)
-            //{
-            //    foreach (var image in images)
-            //    {
-            //        matrix.Clear(deviceIndex, refresh:false);
-            //        matrix.DrawBitmap(0, 0, image, 8, 8, 1);
-            //        matrix.WriteDisplay(deviceIndex);
-            //        Console.Write(".");
-            //        Thread.Sleep(200);
-            //    }
-            //}
 
             maxRepeat = 128;
 

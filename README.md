@@ -19,6 +19,8 @@ Not supported yet:
 * 8x8, 16x8 and 32x8 LED matrix based on the `MAX7219` chip are supported with examples
 * Any EPPROM and Flash memory using the SPI protocol should be supported
 
+![FT232H with 64x8 LED Matrix](./FT232H_64x8 LED Matrix.jpg)
+
 - Serial communication
 
 ## Samples
