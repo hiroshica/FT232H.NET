@@ -17,6 +17,7 @@ Not supported yet:
 * RGB LED strip of type `APA102` are supported with examples
 * 8x8, 32x8 and 64x8 LED matrix based on the `MAX7219` chip are supported with examples
 * Any EPPROM and Flash memory using the SPI protocol should be supported
+* ADC MCP3008 and MCP3004
 
 ![FT232H with 64x8 LED Matrix](https://github.com/madeintheusb/FT232H.NET/blob/master/FT232H_64x8%20LED%20Matrix.jpg?raw=true)
 
