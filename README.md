@@ -12,7 +12,7 @@ Not supported yet:
 	use the same clock and data pins.
 	* To support I2C and SPI at the same time you can use the FT2232H or the FT4222H.
 
-# Chip
+# External components supported or Chip
 
 * RGB LED strip of type `APA102` are supported with examples
 * 8x8, 32x8 and 64x8 LED matrix based on the `MAX7219` chip are supported with examples
