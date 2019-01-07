@@ -20,8 +20,11 @@ namespace MadeInTheUSB.FT232H.Console
             if(ft232Device.Ok)
                 System.Console.WriteLine(ft232Device.ToString());
 
-            // MAX7219 is limited to 10Mhz
-            var ft232hGpioSpiDevice = new GpioSpiDevice(MpsseSpiConfig.GetDefault());
+            // MCP3088 and MAX7219 is limited to 10Mhz
+            var clockSpeed = MpsseSpiConfig._30Mhz;
+            clockSpeed = MpsseSpiConfig._10Mhz;
+            var ft232hGpioSpiDevice = new GpioSpiDevice(MpsseSpiConfig.Make(clockSpeed));
+
             var spi                 = ft232hGpioSpiDevice.SPI;
 
             var gpios               = ft232hGpioSpiDevice.GPIO;

@@ -33,6 +33,7 @@
   
     Mcp300X 10bit ADC Breakout Board from RheinGoldHeavy.com supported
     https://rheingoldheavy.com/product/breakout-board-mcp3008/
+    https://rheingoldheavy.com/mcp3008-tutorial-02-sampling-dc-voltage/
     
     Datasheet http://www.adafruit.com/datasheets/Mcp300X.pdf
 */
@@ -80,11 +81,6 @@ namespace MadeInTheUSB
             this.MaxAdConverter = maxADConverter;
         }
 
-        public void Begin()
-        {
-        }
-        
-
         /// <summary>
         /// Read the value of one analog port using Nusbio spi/hardware acceleration.
         /// </summary>
@@ -96,7 +92,7 @@ namespace MadeInTheUSB
                 throw new ArgumentException(string.Format("Invalid analog port {0}", port));
             
             const byte junk    = (byte)0;
-            var port2          = (byte)((_channelInSingleMode[port] << 4) ); // & 0x03
+            var port2          = (byte)((_channelInSingleMode[port] << 4) & 0x03);
             var bufferReceive  = new byte[3] { 0, 0, 0 };
             var bufferSend     = new List<Byte>() { 0x1, port2, junk };
 
@@ -118,8 +114,6 @@ namespace MadeInTheUSB
         {
             if (result.Succeeded && result.Buffer.Count == 3)
             {
-                //ConsoleEx.WriteLine(0, 15, string.Format("B0:{0:000}, B1:{1:000}, B2:{2:000}",
-                //    result.Buffer[0], result.Buffer[1], result.Buffer[2]), ConsoleColor.Yellow);
                 int r = 0;
                 if (WinUtil.BitUtil.IsSet(result.Buffer[1], 1))
                     r += 256;
@@ -127,7 +121,6 @@ namespace MadeInTheUSB
                     r += 512;
                 r += result.Buffer[2];
 
-                var rr = (result.Buffer[1] & 0x3) << 8 | result.Buffer[2];
                 return r;
             }
             else return -1;
