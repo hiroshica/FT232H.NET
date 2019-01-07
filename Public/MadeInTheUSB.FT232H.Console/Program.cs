@@ -30,7 +30,9 @@ namespace MadeInTheUSB.FT232H.Console
             //CypressFlashMemorySample(spi);
 
 
-            // Api102RgbLedSample(spi);
+            //Api102RgbLedSample(spi);
+
+            ADC_MCP3008Demo(spi);
             GpioSample(gpios, true);
         }
     }

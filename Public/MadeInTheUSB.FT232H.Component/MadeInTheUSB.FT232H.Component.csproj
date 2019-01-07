@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdafruitGFX\Adafruit_GFX.cs" />
+    <Compile Include="ADC\MCP3008.cs" />
     <Compile Include="APA_102_RGB_LED\APA102LEDStrip.cs" />
     <Compile Include="MAX7219\MAX7219.cs" />
     <Compile Include="MAX7219\NusbioLedMatrix.cs" />

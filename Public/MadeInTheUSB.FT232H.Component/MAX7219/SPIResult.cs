@@ -22,8 +22,10 @@ namespace MadeInTheUSB
             this.Succeeded = false;
             return this;
         }
-        public SPIResult Succeed()
+        public SPIResult Succeed(List<byte> buffer = null)
         {
+            if(buffer != null)
+                this.Buffer = buffer;
             this.Succeeded = true;
             return this;
         }

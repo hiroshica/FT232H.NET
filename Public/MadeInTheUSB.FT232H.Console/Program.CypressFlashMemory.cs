@@ -12,7 +12,6 @@ namespace MadeInTheUSB.FT232H.Console
 {
     partial class Program
     {
-       
         public enum Manufacturers : int
         {
             Unknown = 0,
