@@ -99,7 +99,7 @@ namespace MadeInTheUSB
             if(this._spi.Ok(this._spi.QueryReadWrite(bufferSend.ToArray(), bufferReceive))) {
 
                 var r1 = new SPIResult().Succeed(bufferReceive.ToList());
-                System.Console.WriteLine($"bufferOut: {bufferReceive[0]}, {bufferReceive[1]}, {bufferReceive[2]}");
+                // System.Console.WriteLine($"bufferOut: {bufferReceive[0]}, {bufferReceive[1]}, {bufferReceive[2]}");
                 var v = ValidateOperation(r1);
                 if(percentageAdjust != -1)
                 {
@@ -108,6 +108,12 @@ namespace MadeInTheUSB
                 return v;
             }
             else return -1;
+        }
+
+        public double ComputeVoltage(double voltageReference, int adcValue)
+        {
+            var voltageValue = (adcValue * voltageReference) / 1024;
+            return voltageValue;
         }
 
         private int ValidateOperation(SPIResult result)

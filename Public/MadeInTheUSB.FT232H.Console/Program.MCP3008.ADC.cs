@@ -26,7 +26,7 @@ namespace MadeInTheUSB.FT232H.Console
                 for(var adcPort = 0; adcPort < 1; adcPort++)
                 {
                     var adcValue = adc.Read(adcPort);
-                    var voltageValue = (adcValue * referenceVoltage) / 1024;
+                    var voltageValue = adc.ComputeVoltage(referenceVoltage, adcValue);
                     System.Console.WriteLine($"ADC [{adcPort}] = {adcValue}, voltage:{voltageValue}");
                 }
 
