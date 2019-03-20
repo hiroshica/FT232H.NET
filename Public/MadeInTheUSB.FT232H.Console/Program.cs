@@ -22,20 +22,18 @@ namespace MadeInTheUSB.FT232H.Console
 
             // MCP3088 and MAX7219 is limited to 10Mhz
             var clockSpeed = MpsseSpiConfig._30Mhz;
-            clockSpeed = MpsseSpiConfig._10Mhz;
+            // clockSpeed = MpsseSpiConfig._10Mhz;
             var ft232hGpioSpiDevice = new GpioSpiDevice(MpsseSpiConfig.Make(clockSpeed));
 
             var spi                 = ft232hGpioSpiDevice.SPI;
-
             var gpios               = ft232hGpioSpiDevice.GPIO;
+
             GpioSample(gpios, true);
 
-            //CypressFlashMemorySample(spi);
-
+            CypressFlashMemorySample(spi);
 
             //Api102RgbLedSample(spi);
-
-            ADC_MCP3008Demo(spi);
+            // ADC_MCP3008Demo(spi);
             GpioSample(gpios, true);
         }
     }
