@@ -188,7 +188,7 @@ namespace MadeInTheUSB.FT232H.Components
             return this.SendCommand(EEPROM_WRITE_DISABLE_CMD);
         }
 
-        public bool WritePages(int baseAddress, List<byte> buffer, bool setUserHardwareInterfaceState = true)
+        public bool WritePages(int baseAddress, List<byte> buffer, bool setUserHardwareInterfaceState = true, bool verify = false)
         {
             try
             {
@@ -208,7 +208,7 @@ namespace MadeInTheUSB.FT232H.Components
                             return false;
                     }
 
-                    if (buffer.Count <= 64 * 1024)
+                    if (verify && buffer.Count <= BLOCK_SIZE)
                     {
                         var buffer3 = new List<byte>();
                         this.ReadPages(baseAddress, buffer.Count, buffer3);
@@ -236,12 +236,10 @@ namespace MadeInTheUSB.FT232H.Components
             if (!SetWriteRegisterEnable())
                 return false;
 
-            int byteSent       = 0;
             var spiBufferWrite = GetEepromApiWriteBuffer(address, buffer);
-
             var r1 = this._spi.Write(spiBufferWrite) == FtdiMpsseSPIResult.Ok;
 
-            this.WaitForOperation(50, 50, "w");
+            this.WaitForOperation(30, 20, "w");
 
             return r1;
         }
@@ -252,6 +250,7 @@ namespace MadeInTheUSB.FT232H.Components
                 return false;
             var buffer = new List<byte>() { (byte)sectorSizeCmd, (byte)(addr >> 16), (byte)(addr >> 8), (byte)(addr & 0xFF) };
             var r = this.SPISend(buffer);
+
             return r;
         }
 
@@ -263,6 +262,7 @@ namespace MadeInTheUSB.FT232H.Components
                 throw new ArgumentException(string.Format("Address {0} must be a multiple of {1}", addr, this.GetProgramWritePageSize()));
             var b = EraseCommand(addr, EEPROM_SECTOR_ERASE);
             this.WaitForOperation(200, 100, "!"); // Seems slower
+
             return b;
         }
 
@@ -279,6 +279,7 @@ namespace MadeInTheUSB.FT232H.Components
                 throw new ArgumentException(string.Format("Address {0} must be a multiple of {1}", addr, this.GetProgramWritePageSize()));
             var b = EraseCommand(addr, EEPROM_BLOCKERASE_4K);
             this.WaitForOperation(100, 20, "!"); // Seems slower
+
             return b;
         }
 
@@ -290,18 +291,19 @@ namespace MadeInTheUSB.FT232H.Components
                 throw new ArgumentException(string.Format("Address {0} must be a multiple of {1}", addr, this.GetProgramWritePageSize()));
             var b = EraseCommand(addr, EEPROM_BLOCKERASE_64K);
             this.WaitForOperation(100, 50, "!");
+
             return b;
         }
 
-        public bool FormatFlashFAT(int fatIndex)
-        {
-            this.Trace($"FormatFlashFAT fatIndex:{fatIndex}");
+        //public bool FormatFlashFAT(int fatIndex)
+        //{
+        //    this.Trace($"FormatFlashFAT fatIndex:{fatIndex}");
 
-            if (fatIndex == 0 || fatIndex == 1)
-                return this.Erase64KPage(fatIndex * CypressFlashMemory.BLOCK_SIZE);
+        //    if (fatIndex == 0 || fatIndex == 1)
+        //        return this.Erase64KPage(fatIndex * CypressFlashMemory.BLOCK_SIZE);
 
-            throw new ArgumentException($"FAT index {fatIndex} invalid");
-        }
+        //    throw new ArgumentException($"FAT index {fatIndex} invalid");
+        //}
 
         public bool FormatFlash(Action<int> notify, int notifyEvery = 8, int blockCount = -1)
         {
@@ -317,6 +319,7 @@ namespace MadeInTheUSB.FT232H.Components
                 if (!this.Erase64KPage(b * CypressFlashMemory.BLOCK_SIZE))
                     return false;
             }
+
             return true;
         }
 
@@ -338,6 +341,7 @@ namespace MadeInTheUSB.FT232H.Components
                         buffer.AddRange(tmpBuffer);
                     else return false;
                 }
+
                 return true;
             }
             finally {
@@ -367,6 +371,7 @@ namespace MadeInTheUSB.FT232H.Components
                 buffer.AddRange(spiBufferRead);
                 return true;
             }
+
             return false;
 
             //var ec = base.Write(spiBufferWrite, spiBufferWrite.Length, out byteSent, FtSpiTransferOptions.ChipselectEnable);
