@@ -12,6 +12,7 @@ namespace MadeInTheUSB.FT232H
         Output      = 1,
         InputPullUp = 2, // Not Support by Nusbio, Just by Arduino controlled by Nusbio
     }
+
     public enum PinState : byte
     {
         Low = 0,

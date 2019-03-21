@@ -23,7 +23,6 @@ namespace MadeInTheUSB.FT232H
         {
             this.GpioInit();
         }
-
         protected GpioSpiDeviceBaseClass(MpsseSpiConfig spiConfig, MpsseChannelConfiguration channelConfig)
         {
             this._ftdiMpsseChannelConfig = channelConfig ?? MpsseChannelConfiguration.FtdiMpsseChannelZeroConfiguration;
@@ -52,14 +51,12 @@ namespace MadeInTheUSB.FT232H
             this._isDisposed = true;
             LibMpsse.Cleanup();
         }
-
         public FtdiMpsseSPIResult CheckResult(FtdiMpsseSPIResult spiResult)
         {
             if (spiResult != FtdiMpsseSPIResult.Ok)
                 throw new SpiChannelNotConnectedException(spiResult);
             return spiResult;
         }
-
         private void EnforceRightConfiguration()
         {
             if (_globalConfig.spiConfigOptions != _spiConfig.spiConfigOptions)
@@ -88,26 +85,22 @@ namespace MadeInTheUSB.FT232H
             EnforceRightConfiguration();
             return LibMpsse_AccessToCppDll.SPI_Read(_spiHandle, buffer, sizeToTransfer, out sizeTransfered, options);
         }
-
         public FtdiMpsseSPIResult ReadWrite(byte[] bufferSend, byte [] bufferReceive, FtSpiTransferOptions options)
         {
             EnforceRightConfiguration();
             int sizeTransferred;
             return LibMpsse_AccessToCppDll.SPI_ReadWrite(_spiHandle, bufferReceive, bufferSend, bufferSend.Length, out sizeTransferred, options);
         }
-
         public FtdiMpsseSPIResult QueryReadWrite(byte [] bufferSent, byte [] bufferReceived)
         {
             var r = ReadWrite(bufferSent, bufferReceived, FtSpiTransferOptions.ToogleChipSelect);
             return r;
         }
-
         public FtdiMpsseSPIResult Read(byte[] buffer)
         {
             int sizeTransfered;
             return Read(buffer, buffer.Length, out sizeTransfered, FtSpiTransferOptions.ToogleChipSelect);
         }        
-
         public FtdiMpsseSPIResult Query(byte [] bufferSent, byte [] bufferReceived)
         {
             int byteSent = 0;
@@ -119,7 +112,6 @@ namespace MadeInTheUSB.FT232H
             }
             else return ec;
         }
-        
         private byte[] MakeBuffer(int count)
         {
             // Buffer contains 0. Value does not matter. all we need is to send some clock to the slave to read the value

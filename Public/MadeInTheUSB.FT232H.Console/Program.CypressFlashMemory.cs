@@ -63,13 +63,15 @@ namespace MadeInTheUSB.FT232H.Console
             //        System.Console.WriteLine($"Error writing block:{_64kBlock}");
             //}
 
-
+            var ph = new PerformanceHelper();
+            ph.Start();
             for (var _64kBlock = 1; _64kBlock < flash.MaxBlock; _64kBlock++)
             {
-                 System.Console.WriteLine($"Reading block:{_64kBlock}/{flash.MaxBlock}, {_64kBlock*100.0/flash.MaxBlock:0}%");
+                System.Console.WriteLine($"Reading block:{_64kBlock}/{flash.MaxBlock}, {_64kBlock*100.0/flash.MaxBlock:0}%");
                 var buffer = new List<byte>();
-                if(flash.ReadPages(_64kBlock* CypressFlashMemory.BLOCK_SIZE, CypressFlashMemory.BLOCK_SIZE, buffer))
+                if(flash.ReadPages(_64kBlock * CypressFlashMemory.BLOCK_SIZE, CypressFlashMemory.BLOCK_SIZE, buffer))
                 {
+                    ph.AddByte(CypressFlashMemory.BLOCK_SIZE);
                     if (_64kBlock % 2 == 0)
                     {
                         var result = PerformanceHelper.AsciiBufferToString(buffer.ToArray());
@@ -84,7 +86,9 @@ namespace MadeInTheUSB.FT232H.Console
                     }
                 }
             }
-
+            ph.Stop();
+            System.Console.WriteLine(ph.GetResultInfo());
+            System.Console.ReadKey();
             return;
 
             //const int EEPROM_READ_IDENTIFICATION = 0x9F;

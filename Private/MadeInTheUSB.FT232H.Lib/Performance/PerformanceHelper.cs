@@ -16,17 +16,14 @@ namespace MadeInTheUSB.FT232H
                 s += _4CharString;
             return s;
         }
-
         public static byte[] GetAsciiBuffer(string s)
         {
             return Encoding.ASCII.GetBytes(s);
         }
-
         public static string AsciiBufferToString(byte [] buffer)
         {
             return Encoding.ASCII.GetString(buffer);
         }
-
         public static string Get64kStringFred()
         {
             return Get64kString("FRED");
@@ -42,7 +39,6 @@ namespace MadeInTheUSB.FT232H
                 s += "ABCD";
             return s;
         }
-
         Stopwatch _stopwatch;
         int _byteCounter = 0;
         public PerformanceHelper Start()
@@ -58,14 +54,12 @@ namespace MadeInTheUSB.FT232H
         {
             _stopwatch.Stop();
         }
-
         public string GetResultInfo()
         {
             var bytePerSecond = _byteCounter / (_stopwatch.ElapsedMilliseconds / 1000.0);
             var mbBytePerSecond = _byteCounter / (_stopwatch.ElapsedMilliseconds / 1000.0) / 1024 / 1024;
             return $"{mbBytePerSecond:0.00} Mb/S b/S:{bytePerSecond:0.00}, time:{_stopwatch.ElapsedMilliseconds / 1000.0:0.00}";
         }
-
         public void Dispose()
         {
             throw new NotImplementedException();
