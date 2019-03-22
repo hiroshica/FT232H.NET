@@ -51,19 +51,25 @@ namespace MadeInTheUSB.FT232H.Console
 
             // flash.FormatFlash((done) => { System.Console.WriteLine($"{done} formatted"); });
 
-            //for (var _64kBlock = 35; _64kBlock < flash.MaxBlock; _64kBlock++)
-            //{
-            //    System.Console.WriteLine($"Writing block:{_64kBlock}/{flash.MaxBlock}, {_64kBlock*100.0/flash.MaxBlock:0}%");
-            //    var r = false;
-            //    if(_64kBlock % 2 == 0)
-            //        r = flash.WritePages(_64kBlock * CypressFlashMemory.BLOCK_SIZE, _64kAbdcBuffer);
-            //    else
-            //        r = flash.WritePages(_64kBlock * CypressFlashMemory.BLOCK_SIZE, _64kFredBuffer);
-            //    if (!r)
-            //        System.Console.WriteLine($"Error writing block:{_64kBlock}");
-            //}
-
             var ph = new PerformanceHelper();
+            ph.Start();
+            for (var _64kBlock = 0; _64kBlock < flash.MaxBlock; _64kBlock++)
+            {
+                ph.AddByte(CypressFlashMemory.BLOCK_SIZE);
+                System.Console.WriteLine($"Writing block:{_64kBlock}/{flash.MaxBlock}, {_64kBlock * 100.0 / flash.MaxBlock:0}%");
+                var r = false;
+                if (_64kBlock % 2 == 0)
+                    r = flash.WritePages(_64kBlock * CypressFlashMemory.BLOCK_SIZE, _64kAbdcBuffer);
+                else
+                    r = flash.WritePages(_64kBlock * CypressFlashMemory.BLOCK_SIZE, _64kFredBuffer);
+                if (!r)
+                    System.Console.WriteLine($"Error writing block:{_64kBlock}");
+            }
+            ph.Stop();
+            System.Console.WriteLine($"Write Operation:{ph.GetResultInfo()}");
+            System.Console.ReadKey();
+            
+            ph = new PerformanceHelper();
             ph.Start();
             for (var _64kBlock = 1; _64kBlock < flash.MaxBlock; _64kBlock++)
             {
@@ -75,19 +81,17 @@ namespace MadeInTheUSB.FT232H.Console
                     if (_64kBlock % 2 == 0)
                     {
                         var result = PerformanceHelper.AsciiBufferToString(buffer.ToArray());
-                        if (result != _64kAbdcString)
-                            System.Console.WriteLine($"Error reading block:{_64kBlock}");
+                        System.Console.WriteLine($"Reading block:{_64kBlock}, Status:{(result == _64kAbdcString)}");
                     }
                     else
                     {
                         var result = PerformanceHelper.AsciiBufferToString(buffer.ToArray());
-                        if (result != _64kFredString)
-                            System.Console.WriteLine($"Error reading block:{_64kBlock}");
+                        System.Console.WriteLine($"Reading block:{_64kBlock}, Status:{(result == _64kFredString)}");
                     }
                 }
             }
             ph.Stop();
-            System.Console.WriteLine(ph.GetResultInfo());
+            System.Console.WriteLine($"Read Operation:{ph.GetResultInfo()}");
             System.Console.ReadKey();
             return;
 

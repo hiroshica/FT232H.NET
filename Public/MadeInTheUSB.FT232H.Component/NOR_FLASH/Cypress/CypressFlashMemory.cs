@@ -26,6 +26,8 @@ namespace MadeInTheUSB.FT232H.Components
         const int READ_GPIO     = 0;
         const int WRITE_GPIO    = 1;
 
+        public bool TraceOn { get; set; } = false;
+
         private readonly ISPI _spi;
 
         public void SetUserHardwareInterfaceState(DeviceState state)
@@ -53,7 +55,8 @@ namespace MadeInTheUSB.FT232H.Components
 
         private void Trace(string m)
         {
-            Debug.WriteLine(m);
+            if(this.TraceOn)
+                Debug.WriteLine(m);
         }
         
         public CypressFlashMemory(ISPI spi) 
