@@ -32,6 +32,10 @@ namespace MadeInTheUSB.FT232H
         {
             return Get64kString("ABCD");
         }
+        public static string Get64kString0123()
+        {
+            return Get64kString("0123");
+        }
         public static string Get4kStringABCD()
         {
             var s = "";

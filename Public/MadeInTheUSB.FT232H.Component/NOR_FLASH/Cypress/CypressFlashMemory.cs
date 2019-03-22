@@ -191,11 +191,25 @@ namespace MadeInTheUSB.FT232H.Components
             return this.SendCommand(EEPROM_WRITE_DISABLE_CMD);
         }
 
-        public bool WritePages(int baseAddress, List<byte> buffer, bool setUserHardwareInterfaceState = true, bool verify = false)
+        /// <summary>
+        /// Write the buffer starting at address addr. The buffer must contains a multiple of PAGE_SIZE (512).
+        /// </summary>
+        /// <param name="addr">Start address</param>
+        /// <param name="buffer">The buffer to write</param>
+        /// <param name="setUserHardwareInterfaceState">If true notify UI of write operation, not implemented</param>
+        /// <param name="verify">If true verify the data written</param>
+        /// <param name="format">If true format the 64k starting at addr</param>
+        /// <returns></returns>
+        public bool WritePages(int addr, List<byte> buffer, bool setUserHardwareInterfaceState = true, bool verify = false, bool format = false)
         {
             try
             {
-                this.Trace($"WritePages addr:{baseAddress}, Len:{buffer.Count}");
+                if(format)
+                {
+                    if (!this.Erase64KPage(addr)) return false;
+                }
+
+                this.Trace($"WritePages addr:{addr}, Len:{buffer.Count}");
 
                 if(setUserHardwareInterfaceState)
                     this.SetUserHardwareInterfaceState(DeviceState.Writing);
@@ -205,7 +219,7 @@ namespace MadeInTheUSB.FT232H.Components
                     var howManyPage = buffer.Count / PAGE_SIZE;
                     for (var p = 0; p < howManyPage; p++)
                     {
-                        var address = baseAddress + (p * PAGE_SIZE);
+                        var address = addr + (p * PAGE_SIZE);
                         var buffer2 = buffer.GetRange(p * PAGE_SIZE, PAGE_SIZE);
                         if (!this.__WriteOnePage(address, buffer2))
                             return false;
@@ -214,11 +228,12 @@ namespace MadeInTheUSB.FT232H.Components
                     if (verify && buffer.Count <= BLOCK_SIZE)
                     {
                         var buffer3 = new List<byte>();
-                        this.ReadPages(baseAddress, buffer.Count, buffer3);
+                        this.ReadPages(addr, buffer.Count, buffer3);
                         if (!MUSB_FS.BinSerializer.Compare(buffer.ToArray(), buffer3.ToArray()))
                         {
                             if (Debugger.IsAttached)
                                 Debugger.Break();
+                            return false;
                         }
                     }
                     return true;
