@@ -9,8 +9,21 @@ namespace MadeInTheUSB.FT232H
 {
     public class PerformanceHelper : IDisposable
     {
+        public static void AssertString(string s1, string s2)
+        {
+            if(s1.Length != s2.Length)
+                throw new ArgumentException($"Different string len {s1.Length} - {s2.Length}");
+            for(var i=0; i< s1.Length; i++)
+            {
+                if (s1[i] != s2[i])
+                    throw new ArgumentException($"Different char at postion {i} c1:{s1[i]} c2:{s2[i]}");
+            }
+        }
         public static string Get64kString(string _4CharString)
         {
+            if (_4CharString.Length != 4)
+                throw new ArgumentException($"The parameter _4CharString must contains a 4 chars string");
+
             var s = "";
             for (var i = 0; i < 1024 * 16; i++)
                 s += _4CharString;
