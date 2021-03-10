@@ -38,15 +38,18 @@ namespace TestApp
 
             var spi = ft232hGpioSpiDevice.SPI;
             var gpios = ft232hGpioSpiDevice.GPIO;
+            var max = gpios.MaxGpio;
+            var pin = 3;
 
+            gpios.SetPinMode(pin, PinMode.Output);
             for (var iI = 0; iI < 10; ++iI)
             {
-                for (var pin = 0; pin < gpios.MaxGpio; ++pin)
+                //for (var pin = 0; pin < gpios.MaxGpio; ++pin)
                 {
                     gpios.DigitalWrite(pin, PinState.High);
-                    Thread.Sleep(50);
+                    Thread.Sleep(500);
                     gpios.DigitalWrite(pin, PinState.Low);
-                    Thread.Sleep(50);
+                    Thread.Sleep(500);
                 }
             }
 
